@@ -54,23 +54,23 @@ int main(int argc, char *argv[])
 	 	Kolejka_r.push(test);
 	}
 
-	int t = 0;
+	int t = 0; //chwila czasowa w ktorej pojawia sie element
 	int Cmax = 0;
 	Element e;
 	while (!Kolejka_q.empty() || !Kolejka_r.empty()){
 	 	while(!Kolejka_r.empty() && Kolejka_r.top().r <= t){
-		 	e=Kolejka_r.top();
+		 	e = Kolejka_r.top();
 		 	Kolejka_q.push(e);
-		 	Kolejka_r.pop();
+		 	Kolejka_r.pop(); //dodanie najmniejszego r do kolejki q
 	 	}
-	 	if (Kolejka_q.empty()){
-	 		t = Kolejka_r.top().r;
+	 	if (Kolejka_q.empty()){ // sprawdzenie czy kolejka q nie jest 0
+	 		t = Kolejka_r.top().r; //przekakujemy do nastepnej chwili (nastepne zad. z kolejki r)
 	 	}
 		else {
-		 	e = Kolejka_q.top();
-		 	Kolejka_q.pop();
-		 	t = t + e.p;
-		 	Cmax = max(Cmax, t + e.q);
+		 	e = Kolejka_q.top();//pobieramy kol. z gory
+		 	Kolejka_q.pop();//
+		 	t += e.p;
+		 	Cmax = max(Cmax, t + e.q);//suma czasu potrzebnego na wykonanie wszystkich zadan
 	 	}
 	}
  	cout << Cmax;
