@@ -10,6 +10,9 @@ using namespace std;
 class Element{
 public:
 	int r,p,q;
+	Element(){
+		r = p = q = 0;
+	}
 	void czytaj(fstream &file){
 		file >> r >> p >> q;
 	}
@@ -75,12 +78,12 @@ int main(int argc, char *argv[])
 		 	t = Kolejka_r.top().r;
 		}
 		else {
-		 	e = Kolejka_q.top();
+			e = Kolejka_q.top();
 			Kolejka_q.pop();
-			l = e;                 //naszym aktualnym zadaniem jest to co by�o pierwszym elmentem uszeregowanym na kolejce G
-			t = t + e.p;
+			l = e;
+			t += e.p;
 			Cmax = max(Cmax, t + e.q);
-	 	}
+		}
 	}
 	cout << Cmax;
 	return 0;

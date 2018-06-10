@@ -10,6 +10,9 @@ using namespace std;
 class Element{
 public:
 	int r,p,q;
+	Element(){
+		r = p = q = 0;
+	}
 	void czytaj(fstream &file){
 		file >> r >> p >> q;
 	}
