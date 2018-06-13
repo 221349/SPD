@@ -97,8 +97,8 @@ void wyznacz_Lp()      //funkcja wyznaczajaca tablice z liczba poprzednikow
 
 	for (int i = 1; i <n+1 ; i++)
 	{
-		if(PT[i] != 0) Lp[i] += 1;
-		if(PA[i] != 0) Lp[i] += 1;
+		if(PT[i] != 0) Lp[i]++;
+		if(PA[i] != 0) Lp[i]++;
 	}
 }
 
