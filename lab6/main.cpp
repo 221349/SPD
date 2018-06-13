@@ -21,7 +21,7 @@ vector<int>PA;
 vector<bool>statusy; //true jesli zadanie nie zostalo jeszcz wrzucone do kolejki
 vector<int>S;  //tablica z czasami rozpoczecia zadania
 vector<int>C;  //tablica z czasami zakonczenia
-vector<int>kolejka; //kolejka wykonywania zadań
+int kolejka = 0; //kolejka wykonywania zadań
 
 
 bool loadFromFile(int argc, char *argv) // załadowanie pliku do struktury
@@ -109,10 +109,10 @@ void harmonogram()
 
 		if ((Lp[i] == 0) && (statusy[i] == 1))        //zadanie, ktore nie ma poprzednika i statusu ze jest juz w kolejce
 		{
-			kolejka.push_back(i);
-			S[kolejka.back()] = max(C[PA[kolejka.back()]], C[PT[kolejka.back()]]);  //wyznaczanie czasu rozpoczecia
-			C[kolejka.back()] = S[kolejka.back()] + P[kolejka.back()];     //czasu zakonczenia
-			statusy[kolejka.back()] = 0;
+			kolejka++;
+			S[i] = max(C[PA[i]], C[PT[i]]);  //wyznaczanie czasu rozpoczecia
+			C[i] = S[i] + P[i];     //czasu zakonczenia
+			statusy[i] = 0;
 			for(int j=1;j<n+1;j++)          //aktualizacja tablicy z liczba poprzednikow
 			{
 				if(PA[j]==i)
@@ -124,7 +124,7 @@ void harmonogram()
 		}
 	}
 
-	if( int(kolejka.size()) < n) harmonogram();
+	if(kolejka < n) harmonogram();
 }
 void Cmax()                       //wyznaczenie funkcji celu, zadanie ktore ma najwieksza wartosc w tablicy czasow zakonczenia
 {
