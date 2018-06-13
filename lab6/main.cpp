@@ -9,9 +9,12 @@
 
 using namespace std;
 
+int n; //liczba operacji
+
 vector<int> T; //tablica nastepnikow technologicznych
 vector<int> A; //tablica nastepnikow maszynowych
 vector<int> P; //tablica czasow wykonywania
+
 vector<int> Lp; //tablica z liczba poprzednikow
 vector<int>PT; //tablice poprzednikow
 vector<int>PA;
@@ -21,8 +24,6 @@ vector<int>C;  //tablica z czasami zakonczenia
 vector<int>kolejka; //kolejka wykonywania zadań
 
 
-int n; //liczba operacji
-int maszyny; // liczba maszyn
 bool loadFromFile(int argc, char *argv) // załadowanie pliku do struktury
 {
 	char * filename= new char[32];
@@ -45,7 +46,7 @@ bool loadFromFile(int argc, char *argv) // załadowanie pliku do struktury
 	else
 	{
 		cout << "Nie udalo sie otworzyc pliku" << endl;
-		return false;
+		return 1;
 	}
 	file >> n;
 	T.push_back(0);
@@ -66,16 +67,23 @@ bool loadFromFile(int argc, char *argv) // załadowanie pliku do struktury
 		file >> tmp;
 		P.push_back(tmp);
 	}
-	file >> maszyny;
 
+	return 0;
 }
+
+void inicjuj_tablice()
+{
+	Lp.resize(n + 1);
+	C.resize(n + 1);
+	S.resize(n + 1);
+	for (int i = 0; i < n + 1; i++)
+		statusy.push_back(1);
+}
+
 void wyznacz_poprzednikow()
 {
-	for (int i = 0; i < n + 1; i++)
-		PT.push_back(0);
-
-	for (int i = 0; i < n+1; i++)
-		PA.push_back(0);
+	PT.resize(n + 1);
+	PA.resize(n + 1);
 
 	for (int i = 1; i < n+1; i++)
 	{
@@ -83,18 +91,7 @@ void wyznacz_poprzednikow()
 		PA[A[i]] = i;
 	}
 }
-void inicjuj_tablice()
-{
-	bool tmp = true;
-	for (int i = 0; i < n + 1; i++)
-		Lp.push_back(0);
-	for (int i = 0; i < n + 1; i++)
-		C.push_back(0);
-	for (int i = 0; i < n + 1; i++)
-		S.push_back(0);
-	for (int i = 0; i < n + 1; i++)
-		statusy.push_back(tmp);
-}
+
 void wyznacz_Lp()      //funkcja wyznaczajaca tablice z liczba poprzednikow
 {
 
@@ -119,12 +116,12 @@ void harmonogram()
 	for (int i = 1; i < n+1 ;i++)
 	{
 
-		if (Lp[i] == 0 && statusy[i]==true)        //zadanie, ktore nie ma poprzednika i statusu ze jest juz w kolejce
+		if ((Lp[i] == 0) && (statusy[i] == 1))        //zadanie, ktore nie ma poprzednika i statusu ze jest juz w kolejce
 		{
 			kolejka.push_back(i);
 			S[kolejka.back()] = max(C[PA[kolejka.back()]], C[PT[kolejka.back()]]);  //wyznaczanie czasu rozpoczecia
 			C[kolejka.back()] = S[kolejka.back()] + P[kolejka.back()];     //czasu zakonczenia
-			statusy[kolejka.back()] = false;
+			statusy[kolejka.back()] = 0;
 			for(int j=1;j<n+1;j++)          //aktualizacja tablicy z liczba poprzednikow
 			{
 				if(PA[j]==i)
@@ -132,25 +129,20 @@ void harmonogram()
 				if(PT[j]==i)
 				Lp[j]-=1;
 			}
-
-
 			break;
 		}
-
 	}
 
-	if (kolejka.size() < n)
-		harmonogram();
+	if( int(kolejka.size()) < n) harmonogram();
 }
 void Cmax()                       //wyznaczenie funkcji celu, zadanie ktore ma najwieksza wartosc w tablicy czasow zakonczenia
 {
 	int max=0;
 	for(int i=1;i<n+1;i++)
 	{
-		if(C[i]>max)
-		max=C[i];
+		if(C[i]>max) max=C[i];
 	}
-	cout<<max<<endl;
+	cout << max << endl;
 }
 void wyswietl()        //wyswietlanie wynikow rozpoczecia i zakonczenia
 {
@@ -162,7 +154,7 @@ void wyswietl()        //wyswietlanie wynikow rozpoczecia i zakonczenia
 
 int main(int argc, char *argv[])
 {
-	loadFromFile(argc, argv[1]);
+	if(loadFromFile(argc, argv[1])) return 1;
 	inicjuj_tablice();
 	wyznacz_poprzednikow();
 	wyznacz_Lp();
