@@ -7,7 +7,6 @@ using namespace std;
 
 class dane {
 public:
-    int nrzad;
     vector<int> czasnamaszynie;
     int czascalk;
     void wyliczczascalk()
@@ -17,8 +16,6 @@ public:
     }
     bool operator < (const dane& zad) const { return (czascalk < zad.czascalk); }
 };
-
-vector<dane> wektorZadan;
 
 int obliczCmax(vector<dane> wektorZadan, vector<int> tab1, int liczbaZadan, int liczbaMaszyn)
 {
@@ -57,6 +54,8 @@ int main(int argc, char *argv[])
     int liczbaZadan = 0;
     int liczbaMaszyn = 0;
 
+    vector<dane> wektorZadan;
+
     plik >> liczbaZadan;
     plik >> liczbaMaszyn;
 
@@ -69,10 +68,10 @@ int main(int argc, char *argv[])
             plik >> czastemp;
             temp.czasnamaszynie.push_back(czastemp);
         }
-        temp.nrzad = i;
         temp.wyliczczascalk();
         wektorZadan.push_back(temp);
     }
+
     sort(wektorZadan.rbegin(), wektorZadan.rend());
     vector<int> tab1;
     int cMax;
