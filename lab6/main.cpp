@@ -116,9 +116,9 @@ void harmonogram()
 			for(int j=1;j<n+1;j++)          //aktualizacja tablicy z liczba poprzednikow
 			{
 				if(PA[j]==i)
-				Lp[j]-=1;
+				Lp[j]--;
 				if(PT[j]==i)
-				Lp[j]-=1;
+				Lp[j]--;
 			}
 			break;
 		}
